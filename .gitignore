@@ -12,7 +12,9 @@ wheels/
 
 # Logs
 *.log
-logs/
+logs/*
+!logs/.gitkeep
 
 # Uploads
-uploads/
+uploads/*
+!uploads/.gitkeep
