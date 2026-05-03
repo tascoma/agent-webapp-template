@@ -1,14 +1,14 @@
 # Agent Webapp Template
 
-A template for building server-rendered web applications with a [Pydantic AI](https://ai.pydantic.dev/) agent backend.
+A template for building React + FastAPI web applications with a [Pydantic AI](https://ai.pydantic.dev/) agent backend.
 
 ## Stack
 
+- **React + Vite** — frontend UI
 - **FastAPI** — async web framework with dependency injection
 - **Pydantic AI** — structured LLM agent framework
 - **Pydantic v2** — request/response schemas and settings via `BaseSettings`
 - **SQLAlchemy 2.0** — async ORM
-- **Jinja2** — server-side HTML templating
 - **uv** — dependency and virtual environment management
 
 ## Getting started
@@ -31,38 +31,49 @@ Fill in the values in `.env`:
 
 ```env
 APP_ENV=development
-SECRET_KEY=changeme
+SECRET_KEY=              # openssl rand -hex 32
 DATABASE_URL=sqlite+aiosqlite:///./app.db
-ANTHROPIC_API_KEY=your-api-key-here
+ANTHROPIC_API_KEY=       # from console.anthropic.com
 ```
 
-### 3. Run the dev server
+### 3. Run the backend
 
 ```bash
-uv run uvicorn app.main:app --reload
+cd backend
+uv run python -m app.main
+```
+
+### 4. Run the frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
 ## Project structure
 
 ```
 agent-webapp-template/
-├── app/
-│   ├── main.py              # FastAPI app instance, router includes, lifespan
-│   ├── core/
-│   │   ├── config.py        # Pydantic BaseSettings (env-driven)
-│   │   └── logging.py       # Logging configuration
-│   ├── databases/           # SQLAlchemy engine and session factory
-│   ├── dependencies/        # Shared Depends() factories
-│   ├── routes/              # APIRouter modules (one per resource)
-│   ├── models/              # SQLAlchemy ORM models
-│   ├── schemas/             # Pydantic request/response schemas
-│   ├── agents/              # Pydantic AI agent definitions
-│   ├── services/            # Business logic layer
-│   ├── templates/           # Jinja2 HTML templates
-│   └── static/              # CSS, JS, images
-├── tests/
-├── logs/
-└── uploads/
+├── .env.example
+├── pyproject.toml
+├── frontend/                # React + Vite app
+└── backend/
+    ├── app/
+    │   ├── main.py          # FastAPI app, CORS, lifespan
+    │   ├── core/
+    │   │   ├── config.py    # Pydantic BaseSettings (env-driven)
+    │   │   └── logging.py   # Rotating file + console logging
+    │   ├── agents/          # Pydantic AI agent definitions and tools
+    │   ├── dependencies/    # Shared Depends() factories
+    │   ├── databases/       # SQLAlchemy engine and session factory
+    │   ├── routes/          # APIRouter modules (one per resource)
+    │   ├── models/          # SQLAlchemy ORM models
+    │   ├── schemas/         # Pydantic request/response schemas
+    │   └── services/        # Business logic layer
+    ├── tests/
+    ├── logs/
+    └── uploads/
 ```
 
 ## Using this template
