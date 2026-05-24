@@ -10,12 +10,15 @@ uv add alembic
 ```
 
 ### 2. Initialise Alembic inside the backend
+The `backend/alembic/` directory already exists in the repo with a `.gitkeep` placeholder. Remove it, then run init:
+
 ```bash
 cd backend
+rm alembic/.gitkeep
 uv run alembic init alembic
 ```
 
-This creates `backend/alembic/` and `backend/alembic.ini`.
+This populates `backend/alembic/` (env.py, script.py.mako, versions/) and creates `backend/alembic.ini`.
 
 ### 3. Configure `alembic.ini`
 Set the script location (leave `sqlalchemy.url` blank — we'll set it from settings):
