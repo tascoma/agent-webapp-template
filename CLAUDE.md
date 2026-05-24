@@ -16,6 +16,7 @@ Template for building a React + FastAPI web app with a Pydantic-AI agent backend
 - **Pydantic v2** — request/response schemas and settings (`BaseSettings`); run tests with `uv run pytest` from `backend/`
 - **Pydantic-AI** — agent framework for structured LLM interactions; `backend/app/agents/agent.py` is a working example
 - **SQLAlchemy 2.0** — async ORM (`backend/app/databases/`); not pre-installed — add with `uv add sqlalchemy asyncpg` when setting up the database
+- **Alembic** — database schema migrations (`backend/alembic/`); not pre-installed — add via `/add-migration` skill, migrations live in `backend/alembic/versions/`
 - **Supabase** — hosted PostgreSQL database and blob storage; connection URL goes in `DATABASE_URL`, storage wired via `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`
 - **Render** — hosting platform; backend as a Web Service, frontend as a Static Site
 - **Python stdlib `logging`** — configured in `backend/app/core/logging.py`
@@ -42,6 +43,7 @@ agent-webapp-template/
     │   ├── schemas/         # Pydantic request/response schemas
     │   ├── agents/          # Pydantic-AI agent definitions
     │   └── services/        # business logic
+    ├── alembic/             # database migrations (populated by /add-migration)
     ├── tests/
     ├── logs/                # runtime output (gitignored)
     └── uploads/             # user uploads (gitignored)

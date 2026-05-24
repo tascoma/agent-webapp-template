@@ -10,6 +10,7 @@ A template for building full-stack web and iOS applications with a [Pydantic-AI]
 - **Pydantic-AI** — structured LLM agent framework
 - **Pydantic v2** — request/response schemas and settings
 - **SQLAlchemy 2.0** — async ORM (add with `uv add sqlalchemy asyncpg`)
+- **Alembic** — database schema migrations (add via `/add-migration` skill)
 - **Supabase** — hosted PostgreSQL database and blob storage
 - **Render** — hosting (backend as Web Service, frontend as Static Site)
 - **uv** — dependency and virtual environment management
