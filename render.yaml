@@ -1,0 +1,90 @@
+services:
+  # ─── Backend — Production (tracks main) ────────────────────────────────
+  - name: agent-webapp-template-backend
+    type: web
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+    plan: free
+    branch: main
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: HOST
+        value: 0.0.0.0
+      - key: ALLOWED_ORIGINS
+        value: https://agent-webapp-template-frontend.onrender.com
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: STORAGE_BUCKET
+        value: uploads
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-4-6
+      - key: LOG_LEVEL
+        value: INFO
+
+  # ─── Backend — Staging (tracks dev) ────────────────────────────────────
+  - name: agent-webapp-template-backend-staging
+    type: web
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+    plan: free
+    branch: dev
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_ENV
+        value: staging
+      - key: SECRET_KEY
+        generateValue: true
+      - key: HOST
+        value: 0.0.0.0
+      - key: ALLOWED_ORIGINS
+        value: https://agent-webapp-template-frontend-staging.onrender.com
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: STORAGE_BUCKET
+        value: uploads
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-4-6
+      - key: LOG_LEVEL
+        value: DEBUG
+
+  # ─── Frontend — Production (tracks main) ───────────────────────────────
+  - name: agent-webapp-template-frontend
+    type: web
+    env: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    branch: main
+    envVars:
+      - key: VITE_API_URL
+        value: https://agent-webapp-template-backend.onrender.com
+
+  # ─── Frontend — Staging (tracks dev) ───────────────────────────────────
+  - name: agent-webapp-template-frontend-staging
+    type: web
+    env: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    branch: dev
+    envVars:
+      - key: VITE_API_URL
+        value: https://agent-webapp-template-backend-staging.onrender.com
