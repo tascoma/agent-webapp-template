@@ -56,7 +56,9 @@ npm install
 npm run dev
 ```
 
-The Vite dev server proxies `/api/*` to `http://localhost:8000`.
+The Vite dev server proxies `/api/*` to `http://localhost:8000`, so the frontend
+shows the backend's health status with no CORS setup. Run `/run-dev` for the
+full local loop, or `/setup-frontend` to add routing and auth.
 
 ## Project structure
 
@@ -64,7 +66,7 @@ The Vite dev server proxies `/api/*` to `http://localhost:8000`.
 agent-webapp-template/
 ├── .env.example
 ├── pyproject.toml
-├── skills/                  # Claude Code task playbooks
+├── skills/                  # Claude Code task playbooks (one folder per skill: SKILL.md + scripts/ + references/)
 ├── frontend/                # React + Vite app
 ├── ios/                     # Swift iOS app
 └── backend/
@@ -73,7 +75,7 @@ agent-webapp-template/
     │   ├── core/            # config.py, logging.py
     │   ├── agents/          # Pydantic-AI agent definitions
     │   ├── dependencies/    # Shared Depends() factories
-    │   ├── databases/       # SQLAlchemy engine and session factory
+    │   ├── databases/       # async engine, session factory, Base (wired by /setup)
     │   ├── routes/          # APIRouter modules (one per resource)
     │   ├── models/          # SQLAlchemy ORM models
     │   ├── schemas/         # Pydantic request/response schemas
@@ -100,6 +102,7 @@ This repo ships Claude Code skills in `skills/` for common tasks:
 | Skill | What it does |
 |---|---|
 | `/setup` | First-time project bootstrap |
+| `/run-dev` | Run backend + frontend locally with hot reload |
 | `/add-resource` | Add a full CRUD resource |
 | `/add-agent` | Add a new Pydantic-AI agent |
 | `/setup-supabase` | Connect to a Supabase database |
@@ -112,9 +115,13 @@ This repo ships Claude Code skills in `skills/` for common tasks:
 | `/setup-storage` | Set up Supabase Storage for file uploads |
 | `/add-auth` | Add Supabase Auth (backend, React, iOS) |
 | `/add-migration` | Set up Alembic for schema migrations |
+| `/seed-database` | Write and run idempotent seed scripts |
 | `/setup-frontend` | Wire up the React app |
 | `/add-frontend-feature` | Add a page or feature to the React frontend |
 | `/add-tests` | Set up the pytest suite |
+| `/test-frontend` | Set up Vitest + React Testing Library |
+| `/test-agent` | Test Pydantic-AI agents with a stub model |
 | `/setup-ci` | Add GitHub Actions CI and auto-deploy |
+| `/sync-skills` | Sync skills with the upstream template |
 
 See [CLAUDE.md](CLAUDE.md) for full context on how this project is structured.
