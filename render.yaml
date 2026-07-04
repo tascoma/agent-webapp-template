@@ -71,7 +71,7 @@ services:
     env: static
     rootDir: frontend
     buildCommand: npm ci && npm run build
-    publishPath: dist
+    staticPublishPath: dist
     branch: main
     envVars:
       - key: VITE_API_URL
@@ -83,7 +83,7 @@ services:
     env: static
     rootDir: frontend
     buildCommand: npm ci && npm run build
-    publishPath: dist
+    staticPublishPath: dist
     branch: dev
     envVars:
       - key: VITE_API_URL
