@@ -67,11 +67,10 @@ services:
 
   # ─── Frontend — Production (tracks main) ───────────────────────────────
   - name: agent-webapp-template-frontend
-    type: web
     env: static
     rootDir: frontend
     buildCommand: npm ci && npm run build
-    staticPublishPath: dist
+    publishPath: dist
     branch: main
     envVars:
       - key: VITE_API_URL
@@ -79,11 +78,10 @@ services:
 
   # ─── Frontend — Staging (tracks dev) ───────────────────────────────────
   - name: agent-webapp-template-frontend-staging
-    type: web
     env: static
     rootDir: frontend
     buildCommand: npm ci && npm run build
-    staticPublishPath: dist
+    publishPath: dist
     branch: dev
     envVars:
       - key: VITE_API_URL
