@@ -17,14 +17,16 @@ uv sync
 
 `httpx`, `pytest`, and `pytest-asyncio` are already declared as dev dependencies.
 
-### 2. Configure pytest (`backend/pyproject.toml` or `backend/pytest.ini`)
-Add to `pyproject.toml`:
+### 2. Configure pytest (root `pyproject.toml`)
+The repo has a single `pyproject.toml` at the repo root — there is no `backend/pyproject.toml`. Add the config there, not under `backend/`:
 
 ```toml
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
-testpaths = ["tests"]
+testpaths = ["backend/tests"]
 ```
+
+`testpaths` is relative to wherever the discovered ini file lives (pytest's `rootdir`), which is the repo root here — so it must read `["backend/tests"]`, not `["tests"]`, even though you run `pytest` from inside `backend/`. Adding `testpaths = ["tests"]` to the root config would silently collect zero tests.
 
 `asyncio_mode = "auto"` removes the need to decorate every async test with `@pytest.mark.asyncio`.
 
