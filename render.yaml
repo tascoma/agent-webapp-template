@@ -13,8 +13,6 @@ services:
         value: production
       - key: SECRET_KEY
         generateValue: true
-      - key: HOST
-        value: 0.0.0.0
       - key: ALLOWED_ORIGINS
         value: https://agent-webapp-template-frontend.onrender.com
       - key: DATABASE_URL
@@ -46,8 +44,6 @@ services:
         value: staging
       - key: SECRET_KEY
         generateValue: true
-      - key: HOST
-        value: 0.0.0.0
       - key: ALLOWED_ORIGINS
         value: https://agent-webapp-template-frontend-staging.onrender.com
       - key: DATABASE_URL
