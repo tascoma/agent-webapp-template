@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY pyproject.toml uv.lock ./
 COPY backend/app ./backend/app
+COPY backend/alembic ./backend/alembic
 
 RUN uv sync --no-dev
 

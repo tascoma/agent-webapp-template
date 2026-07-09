@@ -27,26 +27,36 @@ Copy `.env.example` → `.env` at the repo root and fill in real values. Add any
 Define a `Settings` class via `pydantic_settings.BaseSettings`. Every env var the app needs is a typed field. Expose one module-level `settings` instance — nothing else reads `os.environ` directly.
 
 ```python
+from pathlib import Path
+
 from pydantic_settings import BaseSettings
+
+_ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
 
 class Settings(BaseSettings):
     app_env: str = "development"
-    secret_key: str
+    # Unused by the base template — reserved for session/cookie signing once
+    # /add-auth wires it up. Left blank, the app still boots.
+    secret_key: str = ""
     host: str = "127.0.0.1"
     port: int = 8000
     # Use str, not list[str] — pydantic-settings JSON-decodes list fields before
     # validators run, which breaks plain comma-separated env values.
-    # Split at the call site: settings.allowed_origins.split(",")
+    # Split at the call site: [o.strip() for o in settings.allowed_origins.split(",")]
     allowed_origins: str = "http://localhost:5173"
-    database_url: str
+    # Unused until a SQLAlchemy engine is wired up (see step 4 below or
+    # /setup-supabase). Left blank, the app still boots.
+    database_url: str = ""
     anthropic_api_key: str
     anthropic_model: str = "claude-sonnet-4-6"
     log_level: str = "INFO"
 
-    model_config = {"env_file": "../.env"}
+    model_config = {"env_file": _ENV_FILE}
 
 settings = Settings()
 ```
+
+`_ENV_FILE` is anchored to `Path(__file__)` rather than a CWD-relative string — this makes it resolve correctly no matter where the process is started from (repo root, `backend/`, Docker's `WORKDIR`, or pytest run from any directory). Adjust the `.parents[N]` index if you move `config.py`.
 
 ### 3. Logging (`backend/app/core/logging.py`)
 Implement `configure_logging()` that sets the root log level and format. Call it once from the lifespan in `main.py`. Every module gets its logger via `logging.getLogger(__name__)`.

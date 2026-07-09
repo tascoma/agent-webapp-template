@@ -16,7 +16,7 @@ mkdir -p .github/workflows
 ```
 
 ### 2. CI workflow (`.github/workflows/ci.yml`)
-Runs on every push and pull request. Executes the backend test suite and a frontend type-check.
+Runs on every push and pull request. Lints and tests the backend, and lints and type-checks the frontend.
 
 ```yaml
 name: CI
@@ -43,6 +43,9 @@ jobs:
 
       - name: Install dependencies
         run: uv sync
+
+      - name: Lint
+        run: uv run ruff check .
 
       - name: Run tests
         working-directory: backend
@@ -71,6 +74,10 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: npm ci
+
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint
 
       - name: Type check
         working-directory: frontend

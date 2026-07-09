@@ -110,8 +110,8 @@ they're added by `/setup-frontend`, and individual pages/features by
 Supabase is optional and the app boots without it. Two independent pieces
 plug in as needed:
 
-- **Database**: `DATABASE_URL` is a required setting, but nothing reads it
-  yet — `/setup-supabase` provisions a Supabase Postgres instance and
+- **Database**: `DATABASE_URL` defaults to an empty string and nothing reads
+  it yet — `/setup-supabase` provisions a Supabase Postgres instance and
   `/setup` (or `/setup-supabase`) wires up the SQLAlchemy async engine and
   session factory in `databases/`. Schema changes go through Alembic, set
   up via `/add-migration` (currently `backend/alembic/` is an empty
