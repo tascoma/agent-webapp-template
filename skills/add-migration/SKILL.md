@@ -47,10 +47,17 @@ config.set_main_option("sqlalchemy.url", settings.database_url)
 target_metadata = Base.metadata
 ```
 
-For async engines, use the synchronous URL form for Alembic (replace `+asyncpg` with `+psycopg2` or use `run_sync`). The simplest approach is a sync URL just for migrations:
+For async engines, use the synchronous URL form for Alembic (replace `+asyncpg` with `+psycopg2`, or drop `+aiosqlite` for SQLite). The simplest approach is a sync URL just for migrations:
 
 ```python
-sync_url = settings.database_url.replace("+asyncpg", "+psycopg2")
+db_url = settings.database_url
+if db_url.startswith(("postgresql", "postgres")):
+    sync_url = db_url.replace("+asyncpg", "+psycopg2")
+elif db_url.startswith("sqlite"):
+    # aiosqlite is async-only; the sync sqlite3 driver needs no async prefix.
+    sync_url = db_url.replace("+aiosqlite", "")
+else:
+    sync_url = db_url
 config.set_main_option("sqlalchemy.url", sync_url)
 ```
 
@@ -58,6 +65,8 @@ Install `psycopg2-binary` if using PostgreSQL:
 ```bash
 uv add psycopg2-binary
 ```
+
+SQLite needs no extra driver for Alembic — the sync engine uses the stdlib `sqlite3` module already bundled with Python (the template's default `DATABASE_URL` is `sqlite+aiosqlite:///./app.db`, which this branch handles automatically).
 
 ### 5. Add `alembic/` to git, ignore versions output
 The `alembic/versions/` folder should be committed — migration files are source code.

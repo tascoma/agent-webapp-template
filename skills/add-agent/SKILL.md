@@ -38,15 +38,14 @@ async def my_tool_with_deps(ctx: RunContext[MyDeps], arg: str) -> str:
 
 If the agent needs structured output, pass `result_type=MyResponseSchema` to `Agent(...)`.
 
-### 2. Dependency factory (`backend/app/dependencies/<name>.py`)
-Expose the agent through a `Depends()`-compatible factory so routes receive it via injection and tests can swap it.
+### 2. Dependency factory (`backend/app/dependencies/__init__.py`)
+Expose the agent through a `Depends()`-compatible factory so routes receive it via injection and tests can swap it. Dependencies are centralized in this one file — add your factory alongside the existing ones (`get_agent()`, `get_storage_client()`), don't create a new per-resource file.
 
 ```python
-from app.agents.<name> import agent
-from pydantic_ai import Agent
+from app.agents.<name> import agent as <name>_agent
 
-def get_<name>_agent() -> Agent:
-    return agent
+def get_<name>_agent():
+    return <name>_agent
 ```
 
 If the agent uses `deps_type`, build and inject the deps object here too.
@@ -55,7 +54,7 @@ If the agent uses `deps_type`, build and inject the deps object here too.
 Inject the agent via `Depends()` in the route, pass it to the service.
 
 ```python
-from app.dependencies.<name> import get_<name>_agent
+from app.dependencies import get_<name>_agent
 
 @router.post("/run")
 async def run_agent(
@@ -71,7 +70,7 @@ Override the dependency in tests to inject a stub or a fixture agent with a test
 
 ```python
 from app.main import app
-from app.dependencies.<name> import get_<name>_agent
+from app.dependencies import get_<name>_agent
 
 def override_agent():
     return stub_agent  # a minimal Agent pointed at a test model
